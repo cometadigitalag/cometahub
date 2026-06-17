@@ -1,0 +1,137 @@
+/* Hero ocupa a altura da tela e centraliza o conteúdo */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding: 7rem 0 4rem;
+  overflow: hidden;
+}
+
+/* Grid futurista em perspectiva no fundo */
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(225, 6, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(225, 6, 0, 0.08) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 75%);
+}
+
+/* Orbe de luz vermelha pulsando atrás do conteúdo */
+.orb {
+  position: absolute;
+  top: 10%;
+  right: -5%;
+  width: 520px;
+  height: 520px;
+  max-width: 80vw;
+  background: radial-gradient(circle, rgba(225, 6, 0, 0.35), transparent 65%);
+  filter: blur(40px);
+  animation: pulse 7s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.1); }
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  align-items: center;
+  gap: 3rem;
+}
+
+/* --- Conteúdo de texto --- */
+.badge {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+}
+
+/* Palavra em destaque com gradiente da marca */
+.highlight {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  max-width: 540px;
+  margin-bottom: 2.5rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* --- Visual (ícone do cometa) --- */
+.visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.visual img {
+  width: 100%;
+  max-width: 380px;
+  filter: drop-shadow(0 20px 50px rgba(225, 6, 0, 0.5));
+  position: relative;
+  z-index: 1;
+}
+
+.visualGlow {
+  position: absolute;
+  inset: 15%;
+  background: radial-gradient(circle, rgba(225, 6, 0, 0.4), transparent 70%);
+  filter: blur(50px);
+}
+
+/* =======================================================================
+   RESPONSIVO — empilha as colunas no mobile (mobile-first)
+   ======================================================================= */
+@media (max-width: 860px) {
+  .inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 2rem;
+  }
+
+  .subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+
+  /* O visual aparece acima do texto em telas menores */
+  .visual {
+    order: -1;
+  }
+
+  .visual img {
+    max-width: 240px;
+  }
+}

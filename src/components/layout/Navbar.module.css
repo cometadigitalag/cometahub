@@ -1,0 +1,118 @@
+/* Navbar fixa no topo */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 1rem 0;
+  transition: background var(--transition), backdrop-filter var(--transition),
+    padding var(--transition), border-color var(--transition);
+  border-bottom: 1px solid transparent;
+}
+
+/* Estado "rolado": fundo de vidro escuro + borda sutil */
+.scrolled {
+  background: rgba(10, 10, 11, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--color-border);
+  padding: 0.6rem 0;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.logo img {
+  height: 38px;
+  width: auto;
+}
+
+/* --- Links --- */
+.links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.links a {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  transition: color var(--transition);
+  position: relative;
+}
+
+.links a:hover {
+  color: var(--color-text);
+}
+
+/* Sublinhado animado no hover */
+.links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 2px;
+  background: var(--gradient-primary);
+  transition: width var(--transition);
+}
+.links a:hover::after {
+  width: 100%;
+}
+
+.mobileCta {
+  display: none; /* só aparece dentro do drawer mobile */
+}
+
+/* Botão hambúrguer escondido no desktop */
+.toggle {
+  display: none;
+  font-size: 1.6rem;
+  color: var(--color-text);
+}
+
+/* =======================================================================
+   RESPONSIVO — menu vira drawer lateral no mobile (mobile-first friendly)
+   ======================================================================= */
+@media (max-width: 860px) {
+  .desktopCta {
+    display: none;
+  }
+
+  .toggle {
+    display: flex;
+  }
+
+  /* Drawer: desliza da direita, ocupa a tela toda */
+  .links {
+    position: fixed;
+    inset: 0 0 0 30%;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    background: rgba(10, 10, 11, 0.96);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid var(--color-border);
+    transform: translateX(100%);
+    transition: transform var(--transition);
+  }
+
+  .links.open {
+    transform: translateX(0);
+  }
+
+  .links a {
+    font-size: 1.2rem;
+  }
+
+  .mobileCta {
+    display: block;
+    margin-top: 1rem;
+  }
+}

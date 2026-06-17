@@ -1,0 +1,34 @@
+.services {
+  padding: var(--section-gap) 0;
+}
+
+/* Grid responsivo "auto-fit": ajusta o nº de colunas ao espaço disponível */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.7rem;
+}
+
+.card p {
+  font-size: 0.97rem;
+}
+
+/* Selo do ícone do serviço */
+.iconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 1.4rem;
+  font-size: 1.5rem;
+  color: var(--color-primary-glow);
+  border-radius: var(--radius-sm);
+  background: var(--color-primary-soft);
+  border: 1px solid rgba(225, 6, 0, 0.25);
+}

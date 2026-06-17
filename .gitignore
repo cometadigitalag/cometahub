@@ -1,0 +1,12 @@
+node_modules
+dist
+
+# Protótipo antigo em HTML puro (não faz parte do app React)
+cometahub-red/
+.vercel
+dist-ssr
+*.local
+.DS_Store
+.env
+.env.*
+!.env.example

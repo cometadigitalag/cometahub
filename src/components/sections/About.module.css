@@ -1,0 +1,54 @@
+.about {
+  padding: var(--section-gap) 0;
+}
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.pillar {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  border-radius: var(--radius-md);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.pillar:hover {
+  transform: translateY(-4px);
+  border-color: rgba(225, 6, 0, 0.4);
+}
+
+/* Selo redondo com o ícone, em gradiente da marca */
+.iconWrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1.25rem;
+  font-size: 1.6rem;
+  color: #fff;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  box-shadow: var(--glow-primary);
+}
+
+.pillar h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.6rem;
+}
+
+.pillar p {
+  font-size: 0.97rem;
+}
+
+/* Responsivo: empilha os pilares no mobile */
+@media (max-width: 760px) {
+  .pillars {
+    grid-template-columns: 1fr;
+  }
+}

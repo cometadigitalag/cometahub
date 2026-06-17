@@ -1,0 +1,39 @@
+/* Card em glassmorphism com brilho de borda no hover */
+.card {
+  position: relative;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  padding: 2rem 1.75rem;
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition), border-color var(--transition),
+    box-shadow var(--transition);
+  overflow: hidden;
+}
+
+/* Linha de luz que aparece no topo do card ao passar o mouse */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(130deg, var(--color-primary-glow), transparent 45%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(225, 6, 0, 0.4);
+  box-shadow: var(--shadow-card), var(--glow-soft);
+}
+
+.card:hover::before {
+  opacity: 1;
+}

@@ -1,0 +1,52 @@
+/* =========================================================================
+   DESIGN TOKENS — CometaHub
+   Variáveis CSS globais derivadas da paleta da LOGO (cometa vermelho / preto).
+   Centralizar as cores aqui torna o tema reutilizável e fácil de ajustar.
+   ========================================================================= */
+:root {
+  /* --- Cores da marca (extraídas da logo) --- */
+  --color-primary: #e10600;        /* vermelho cometa — CTAs e destaques */
+  --color-primary-glow: #ff2d1a;   /* vermelho mais quente — brilhos/hover */
+  --color-primary-deep: #8b0000;   /* vermelho profundo — gradientes */
+  --color-primary-soft: rgba(225, 6, 0, 0.12); /* fundo translúcido */
+
+  /* --- Fundos (tons de preto/grafite) --- */
+  --color-bg: #0a0a0b;             /* fundo base da página */
+  --color-bg-elevated: #111114;    /* superfícies elevadas */
+  --color-surface: #16161a;        /* cards sólidos */
+
+  /* --- Texto --- */
+  --color-text: #ffffff;           /* títulos / texto forte */
+  --color-text-muted: #b8b8c0;     /* texto de corpo */
+  --color-text-dim: #6c6c78;       /* texto secundário/legendas */
+
+  /* --- Bordas e vidro (glassmorphism) --- */
+  --color-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --glass-blur: 16px;
+
+  /* --- Gradientes futuristas --- */
+  --gradient-primary: linear-gradient(135deg, #ff2d1a 0%, #e10600 50%, #8b0000 100%);
+  --gradient-text: linear-gradient(120deg, #ffffff 0%, #ff7a6e 60%, #e10600 100%);
+  --gradient-radial: radial-gradient(circle at 50% 0%, rgba(225, 6, 0, 0.25), transparent 60%);
+
+  /* --- Sombras e brilhos (glow neon) --- */
+  --glow-primary: 0 0 24px rgba(225, 6, 0, 0.45);
+  --glow-soft: 0 0 40px rgba(225, 6, 0, 0.25);
+  --shadow-card: 0 18px 40px rgba(0, 0, 0, 0.45);
+
+  /* --- Tipografia --- */
+  --font-display: 'Space Grotesk', system-ui, sans-serif; /* títulos de impacto */
+  --font-body: 'Inter', system-ui, sans-serif;            /* corpo */
+
+  /* --- Layout --- */
+  --max-width: 1180px;             /* largura máxima do conteúdo */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --section-gap: clamp(4rem, 10vw, 8rem); /* espaçamento vertical entre seções */
+
+  /* --- Transições --- */
+  --transition: 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}

@@ -1,0 +1,49 @@
+/* Botão reutilizável com micro-interações (hover/active) */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition),
+    background var(--transition), border-color var(--transition);
+  white-space: nowrap;
+}
+
+.button:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.icon {
+  font-size: 1.15em;
+}
+
+/* Variante principal: gradiente vermelho com brilho neon */
+.primary {
+  background: var(--gradient-primary);
+  color: #fff;
+  box-shadow: var(--glow-primary);
+}
+.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 34px rgba(225, 6, 0, 0.6);
+}
+
+/* Variante fantasma: contorno em vidro, ganha brilho no hover */
+.ghost {
+  background: var(--glass-bg);
+  color: var(--color-text);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+}
+.ghost:hover {
+  border-color: var(--color-primary);
+  color: #fff;
+  box-shadow: var(--glow-soft);
+  transform: translateY(-2px);
+}
