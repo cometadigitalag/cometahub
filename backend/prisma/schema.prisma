@@ -1,0 +1,57 @@
+// =========================================================================
+// SCHEMA PRISMA — CometaHub
+// Agora: SQLite (arquivo local). Depois: PostgreSQL no AWS RDS.
+// Para migrar, troque provider p/ "postgresql" e ajuste DATABASE_URL no .env.
+// Obs.: SQLite não suporta enums; usamos String + valores validados no código.
+// =========================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Usuário do painel interno (equipe da agência).
+model User {
+  id        String   @id @default(cuid())
+  nome      String
+  email     String   @unique
+  senha     String // hash bcrypt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Projeto da agência.
+model Project {
+  id          String       @id @default(cuid())
+  nome        String
+  cliente     String       @default("")
+  descricao   String       @default("")
+  status      String       @default("ativo") // ativo | pausado | concluido
+  dataInicio  String       @default("") // "YYYY-MM-DD"
+  dataFim     String       @default("") // "YYYY-MM-DD"
+  obligations Obligation[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// Obrigação (item do roadmap de um projeto).
+model Obligation {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  titulo      String
+  descricao   String   @default("")
+  responsavel String   @default("")
+  prazo       String   @default("") // "YYYY-MM-DD"
+  prioridade  String   @default("media") // baixa | media | alta
+  status      String   @default("pendente") // pendente | em_andamento | concluido
+  ordem       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([projectId])
+}

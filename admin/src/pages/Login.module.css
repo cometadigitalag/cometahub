@@ -1,0 +1,41 @@
+.wrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: var(--color-bg);
+  background-image: var(--gradient-radial);
+  background-repeat: no-repeat;
+}
+.card {
+  width: 100%;
+  max-width: 380px;
+  padding: 2.2rem 2rem;
+}
+.brand {
+  text-align: center;
+  margin-bottom: 1.8rem;
+}
+.logo {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--gradient-primary);
+  box-shadow: var(--glow-soft);
+  font-size: 1.6rem;
+  margin-bottom: 0.9rem;
+}
+.brand h1 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.brand p {
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
+}
