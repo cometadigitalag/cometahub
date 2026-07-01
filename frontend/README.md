@@ -1,13 +1,13 @@
-# CometaHub — Admin (Painel Interno)
+# CometaHub — Frontend (Painel Interno)
 
-Frontend do painel interno (React + Vite). Consome a API em `../backend`.
+Frontend do painel interno da agência (React + Vite). Consome a API em `../backend`.
 
 ## Rodar localmente
 
 Suba a **API** primeiro (ver `../backend/README.md`), depois:
 
 ```bash
-cd admin
+cd frontend
 npm install
 npm run dev        # painel em http://localhost:5174
 ```
