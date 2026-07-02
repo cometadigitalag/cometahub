@@ -21,6 +21,58 @@ export const OBLIGATION_PRIORITY = {
   alta: { label: 'Alta', color: '#e10600' },
 }
 
+// --- Agenda / rotinas -----------------------------------------------------
+// Dias da semana (índice 0=Dom .. 6=Sáb, igual ao getUTCDay do backend).
+export const WEEKDAYS = [
+  { n: 0, curto: 'Dom', label: 'Domingo' },
+  { n: 1, curto: 'Seg', label: 'Segunda' },
+  { n: 2, curto: 'Ter', label: 'Terça' },
+  { n: 3, curto: 'Qua', label: 'Quarta' },
+  { n: 4, curto: 'Qui', label: 'Quinta' },
+  { n: 5, curto: 'Sex', label: 'Sexta' },
+  { n: 6, curto: 'Sáb', label: 'Sábado' },
+]
+
+export const ROUTINE_TYPES = {
+  diaria: 'Todos os dias',
+  semanal: 'Dias da semana',
+  mensal: 'Mensal (dia do mês)',
+  unica: 'Data única',
+}
+
+// Paleta para colorir as rotinas na agenda.
+export const ROUTINE_COLORS = [
+  '#e10600',
+  '#22c55e',
+  '#3b82f6',
+  '#eab308',
+  '#a855f7',
+  '#ec4899',
+  '#14b8a6',
+  '#f97316',
+]
+
+export const MONTH_NAMES = [
+  'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro',
+]
+
+// Descrição legível da recorrência de uma rotina.
+export function recurrenceLabel(r) {
+  if (r.tipo === 'diaria') return 'Todos os dias'
+  if (r.tipo === 'unica') return formatDate(r.data)
+  if (r.tipo === 'mensal') return `Todo dia ${r.diaMes} do mês`
+  if (r.tipo === 'semanal') {
+    const dias = String(r.diasSemana || '')
+      .split(',')
+      .filter(Boolean)
+      .map((n) => WEEKDAYS[Number(n)]?.curto)
+      .filter(Boolean)
+    return dias.length ? dias.join(', ') : 'Semanal'
+  }
+  return ''
+}
+
 // --- Permissões / módulos -------------------------------------------------
 // Catálogo de módulos que um colaborador pode receber (espelha o backend).
 export const MODULES = [

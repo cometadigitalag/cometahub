@@ -39,6 +39,7 @@ model Project {
   dataInicio  String       @default("") // "YYYY-MM-DD"
   dataFim     String       @default("") // "YYYY-MM-DD"
   obligations Obligation[]
+  routines    Routine[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -59,4 +60,43 @@ model Obligation {
   updatedAt   DateTime @updatedAt
 
   @@index([projectId])
+}
+
+// Rotina/serviço recorrente da empresa (agenda). Ex.: "todo dia enviar msg",
+// "toda quarta e sábado fazer sorteio".
+model Routine {
+  id          String   @id @default(cuid())
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  titulo      String   @db.VarChar(191)
+  descricao   String   @default("") @db.VarChar(2000)
+  horario     String   @default("") @db.VarChar(5) // "HH:MM" (opcional)
+  // Tipo de recorrência: diaria | semanal | mensal | unica
+  tipo        String   @default("semanal") @db.VarChar(20)
+  diasSemana  String   @default("") @db.VarChar(20) // CSV 0..6 (0=Dom) p/ semanal
+  diaMes      Int?     // dia do mês (1..31) p/ mensal
+  data        String   @default("") @db.VarChar(10) // "YYYY-MM-DD" p/ tipo unica
+  dataInicio  String   @default("") @db.VarChar(10) // início da validade (opcional)
+  dataFim     String   @default("") @db.VarChar(10) // fim da validade (opcional)
+  cor         String   @default("#e10600") @db.VarChar(9)
+  ativo       Boolean  @default(true)
+  completions RoutineCompletion[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+// Registro de execução de uma rotina num dia específico (feito/pendente).
+model RoutineCompletion {
+  id        String   @id @default(cuid())
+  routineId String
+  routine   Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  data      String   @db.VarChar(10) // "YYYY-MM-DD" da ocorrência
+  status    String   @default("concluido") @db.VarChar(20) // concluido | pendente
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([routineId, data])
+  @@index([routineId])
 }

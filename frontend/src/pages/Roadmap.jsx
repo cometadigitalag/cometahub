@@ -9,6 +9,7 @@ import {
   formatDate,
 } from '../lib/constants'
 import Modal from '../components/Modal'
+import ProjectTabs from '../components/ProjectTabs'
 import styles from './Roadmap.module.css'
 
 const vazio = {
@@ -102,6 +103,8 @@ export default function Roadmap() {
           + Nova obrigação
         </button>
       </header>
+
+      <ProjectTabs id={id} active="roadmap" />
 
       <div className={`${styles.progress} glass`}>
         <div className={styles.progressInfo}>

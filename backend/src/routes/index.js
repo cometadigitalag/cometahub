@@ -3,6 +3,7 @@ import { Router } from 'express'
 import authRoutes from './authRoutes.js'
 import projectRoutes from './projectRoutes.js'
 import obligationRoutes from './obligationRoutes.js'
+import routineRoutes from './routineRoutes.js'
 import userRoutes from './userRoutes.js'
 
 const router = Router()
@@ -12,5 +13,6 @@ router.use('/auth', authRoutes)
 router.use('/users', userRoutes)
 router.use('/projects', projectRoutes)
 router.use('/obligations', obligationRoutes)
+router.use('/routines', routineRoutes)
 
 export default router

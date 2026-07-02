@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Projects from './pages/Projects'
 import Roadmap from './pages/Roadmap'
+import Calendar from './pages/Calendar'
 import Financeiro from './pages/Financeiro'
 import Colaboradores from './pages/Colaboradores'
 import Account from './pages/Account'
@@ -40,6 +41,14 @@ export default function App() {
           element={
             <ModuleGate module="projetos">
               <Roadmap />
+            </ModuleGate>
+          }
+        />
+        <Route
+          path="/projetos/:id/calendario"
+          element={
+            <ModuleGate module="projetos">
+              <Calendar />
             </ModuleGate>
           }
         />

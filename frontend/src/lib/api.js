@@ -54,6 +54,16 @@ export const projectsApi = {
   remove: (id) => api.del(`/projects/${id}`),
 }
 
+export const routinesApi = {
+  listByProject: (projectId) => api.get(`/projects/${projectId}/routines`),
+  create: (projectId, data) => api.post(`/projects/${projectId}/routines`, data),
+  calendar: (projectId, start, end) =>
+    api.get(`/projects/${projectId}/calendar?start=${start}&end=${end}`),
+  update: (id, data) => api.put(`/routines/${id}`, data),
+  remove: (id) => api.del(`/routines/${id}`),
+  setCompletion: (id, data, status) => api.post(`/routines/${id}/completions`, { data, status }),
+}
+
 export const usersApi = {
   modules: () => api.get('/users/modules'),
   list: () => api.get('/users'),

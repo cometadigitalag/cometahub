@@ -64,6 +64,14 @@
   margin-top: auto;
 }
 
+.cardLinks {
+  display: flex;
+  gap: 0.5rem;
+}
+.cardLinks a {
+  flex: 1;
+}
+
 .actions {
   display: flex;
   gap: 0.2rem;

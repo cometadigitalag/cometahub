@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import { projectController } from '../controllers/projectController.js'
 import { obligationController } from '../controllers/obligationController.js'
+import { routineController } from '../controllers/routineController.js'
 import { authRequired, requireModule } from '../middleware/auth.js'
 
 const router = Router()
@@ -18,5 +19,10 @@ router.delete('/:id', projectController.remove)
 router.get('/:projectId/obligations', obligationController.listByProject)
 router.post('/:projectId/obligations', obligationController.create)
 router.put('/:projectId/obligations/reorder', obligationController.reorder)
+
+// Rotinas (agenda) + calendário aninhados ao projeto.
+router.get('/:projectId/routines', routineController.listByProject)
+router.post('/:projectId/routines', routineController.create)
+router.get('/:projectId/calendar', routineController.calendar)
 
 export default router

@@ -104,9 +104,14 @@ export default function Projects() {
                   {p.dataFim && <span>Prazo: {formatDate(p.dataFim)}</span>}
                 </div>
 
-                <Link to={`/projetos/${p.id}/roadmap`} className="btn btn-ghost btn-sm" style={{ width: '100%' }}>
-                  Abrir roadmap →
-                </Link>
+                <div className={styles.cardLinks}>
+                  <Link to={`/projetos/${p.id}/roadmap`} className="btn btn-ghost btn-sm">
+                    Roadmap
+                  </Link>
+                  <Link to={`/projetos/${p.id}/calendario`} className="btn btn-ghost btn-sm">
+                    Calendário
+                  </Link>
+                </div>
               </div>
             )
           })}
