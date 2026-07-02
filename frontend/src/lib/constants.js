@@ -21,6 +21,21 @@ export const OBLIGATION_PRIORITY = {
   alta: { label: 'Alta', color: '#e10600' },
 }
 
+// --- Permissões / módulos -------------------------------------------------
+// Catálogo de módulos que um colaborador pode receber (espelha o backend).
+export const MODULES = [
+  { key: 'projetos', label: 'Projetos', path: '/projetos', icon: '▣' },
+  { key: 'financeiro', label: 'Financeiro', path: '/financeiro', icon: '＄' },
+]
+
+export const ROLE_LABELS = { admin: 'Administrador', colaborador: 'Colaborador' }
+
+export const isAdmin = (user) => user?.role === 'admin'
+
+// Admin vê tudo; colaborador só os módulos marcados nas permissões.
+export const canModule = (user, key) =>
+  isAdmin(user) || (user?.permissions || []).includes(key)
+
 // Formata "YYYY-MM-DD" para "DD/MM/AAAA" (evita bug de fuso do new Date).
 export function formatDate(iso) {
   if (!iso) return '—'

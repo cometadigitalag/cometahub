@@ -3,20 +3,23 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { projectsApi } from '../lib/api'
 import { useAuth } from '../context/AuthContext'
-import { PROJECT_STATUS, formatDate } from '../lib/constants'
+import { PROJECT_STATUS, formatDate, canModule } from '../lib/constants'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
   const { user } = useAuth()
+  const temProjetos = canModule(user, 'projetos')
   const [projetos, setProjetos] = useState([])
-  const [carregando, setCarregando] = useState(true)
+  const [carregando, setCarregando] = useState(temProjetos)
 
   useEffect(() => {
+    // Só busca projetos se o usuário tiver acesso ao módulo.
+    if (!temProjetos) return
     projectsApi
       .list()
       .then(setProjetos)
       .finally(() => setCarregando(false))
-  }, [])
+  }, [temProjetos])
 
   const totalObrigacoes = projetos.reduce((s, p) => s + (p._count?.obligations ?? 0), 0)
   const ativos = projetos.filter((p) => p.status === 'ativo').length
@@ -36,18 +39,25 @@ export default function Dashboard() {
         <p className="muted">Visão geral da sua agência.</p>
       </header>
 
-      <div className={styles.stats}>
-        {cards.map((c) => (
-          <div key={c.label} className={`${styles.stat} glass`}>
-            <span className={styles.statValue} style={{ color: c.cor }}>
-              {carregando ? '—' : c.valor}
-            </span>
-            <span className={styles.statLabel}>{c.label}</span>
+      {!temProjetos ? (
+        <div className={`${styles.empty} glass`}>
+          <p>Seu acesso está configurado para os módulos liberados no menu ao lado.</p>
+          <p className="muted">Fale com um administrador se precisar de mais permissões.</p>
+        </div>
+      ) : (
+        <>
+          <div className={styles.stats}>
+            {cards.map((c) => (
+              <div key={c.label} className={`${styles.stat} glass`}>
+                <span className={styles.statValue} style={{ color: c.cor }}>
+                  {carregando ? '—' : c.valor}
+                </span>
+                <span className={styles.statLabel}>{c.label}</span>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
 
-      <div className={styles.sectionHead}>
+          <div className={styles.sectionHead}>
         <h2>Projetos recentes</h2>
         <Link to="/projetos" className="btn btn-ghost btn-sm">
           Ver todos
@@ -84,6 +94,8 @@ export default function Dashboard() {
             )
           })}
         </div>
+      )}
+        </>
       )}
     </div>
   )

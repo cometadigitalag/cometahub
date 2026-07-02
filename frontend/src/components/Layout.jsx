@@ -1,17 +1,24 @@
 // Layout da área autenticada: sidebar de navegação + conteúdo (Outlet).
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { MODULES, canModule, isAdmin, ROLE_LABELS } from '../lib/constants'
 import styles from './Layout.module.css'
-
-const links = [
-  { to: '/', label: 'Dashboard', icon: '◆', end: true },
-  { to: '/projetos', label: 'Projetos', icon: '▣' },
-  { to: '/conta', label: 'Minha conta', icon: '⚙' },
-]
 
 export default function Layout() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+
+  // Menu montado conforme as permissões do usuário logado.
+  const links = [
+    { to: '/', label: 'Dashboard', icon: '◆', end: true },
+    ...MODULES.filter((m) => canModule(user, m.key)).map((m) => ({
+      to: m.path,
+      label: m.label,
+      icon: m.icon,
+    })),
+    ...(isAdmin(user) ? [{ to: '/colaboradores', label: 'Colaboradores', icon: '☺' }] : []),
+    { to: '/conta', label: 'Minha conta', icon: '⚙' },
+  ]
 
   function sair() {
     logout()
@@ -50,7 +57,7 @@ export default function Layout() {
             <div className={styles.avatar}>{(user?.nome || '?').charAt(0).toUpperCase()}</div>
             <div className={styles.userInfo}>
               <strong>{user?.nome}</strong>
-              <span>{user?.email}</span>
+              <span>{ROLE_LABELS[user?.role] || user?.email}</span>
             </div>
           </div>
           <button className="btn btn-ghost btn-sm" onClick={sair} style={{ width: '100%' }}>

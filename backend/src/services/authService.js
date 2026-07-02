@@ -3,17 +3,31 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { env } from '../config/env.js'
 import { userRepository } from '../repositories/userRepository.js'
+import { parsePermissions } from '../config/modules.js'
 import { badRequest, unauthorized, notFound } from '../lib/httpError.js'
 
 function gerarToken(user) {
   return jwt.sign(
-    { sub: user.id, email: user.email, nome: user.nome },
+    {
+      sub: user.id,
+      email: user.email,
+      nome: user.nome,
+      role: user.role,
+      permissions: parsePermissions(user.permissions),
+    },
     env.jwtSecret,
     { expiresIn: env.jwtExpiresIn },
   )
 }
 
-const publico = (u) => ({ id: u.id, nome: u.nome, email: u.email })
+// Representação pública do usuário (sem hash de senha).
+const publico = (u) => ({
+  id: u.id,
+  nome: u.nome,
+  email: u.email,
+  role: u.role,
+  permissions: parsePermissions(u.permissions),
+})
 
 export const authService = {
   async login({ email, senha }) {

@@ -1,12 +1,12 @@
 import { Router } from 'express'
 import { projectController } from '../controllers/projectController.js'
 import { obligationController } from '../controllers/obligationController.js'
-import { authRequired } from '../middleware/auth.js'
+import { authRequired, requireModule } from '../middleware/auth.js'
 
 const router = Router()
 
-// Todas as rotas de projeto exigem autenticação.
-router.use(authRequired)
+// Todas as rotas de projeto exigem autenticação e acesso ao módulo "projetos".
+router.use(authRequired, requireModule('projetos'))
 
 router.get('/', projectController.list)
 router.post('/', projectController.create)

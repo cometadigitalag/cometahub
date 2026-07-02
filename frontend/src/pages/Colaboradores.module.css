@@ -1,0 +1,135 @@
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.8rem;
+}
+.head h1 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  margin-bottom: 0.2rem;
+}
+
+.table {
+  overflow: hidden;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1.3fr 1.6fr 0.9fr 1.4fr 70px;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.2rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.88rem;
+}
+.row:last-child {
+  border-bottom: none;
+}
+.header {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-dim);
+  background: var(--glass-bg);
+}
+.nome {
+  font-weight: 600;
+}
+.voce {
+  color: var(--color-text-dim);
+  font-weight: 400;
+  font-style: normal;
+}
+.email {
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mods {
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text-muted);
+}
+.admin {
+  color: var(--color-primary-glow);
+  border-color: rgba(225, 6, 0, 0.4);
+  background: var(--color-primary-soft);
+}
+
+.actions {
+  display: flex;
+  gap: 0.2rem;
+  justify-content: flex-end;
+}
+.iconBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-dim);
+  padding: 0.3rem 0.45rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: background var(--transition), color var(--transition);
+}
+.iconBtn:hover {
+  background: var(--glass-bg);
+  color: #fff;
+}
+
+.modList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+}
+.modItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-elevated);
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: border-color var(--transition);
+}
+.modItem:hover {
+  border-color: rgba(225, 6, 0, 0.35);
+}
+.modItem input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+}
+.modIcon {
+  color: var(--color-primary-glow);
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  margin-top: 0.6rem;
+}
+
+@media (max-width: 720px) {
+  .row {
+    grid-template-columns: 1fr 1fr 60px;
+  }
+  .email,
+  .mods {
+    display: none;
+  }
+}

@@ -2,10 +2,13 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import Layout from './components/Layout'
+import { AdminOnly, ModuleGate } from './components/Gate'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Projects from './pages/Projects'
 import Roadmap from './pages/Roadmap'
+import Financeiro from './pages/Financeiro'
+import Colaboradores from './pages/Colaboradores'
 import Account from './pages/Account'
 
 export default function App() {
@@ -22,8 +25,45 @@ export default function App() {
         }
       >
         <Route path="/" element={<Dashboard />} />
-        <Route path="/projetos" element={<Projects />} />
-        <Route path="/projetos/:id/roadmap" element={<Roadmap />} />
+
+        {/* Módulo Projetos */}
+        <Route
+          path="/projetos"
+          element={
+            <ModuleGate module="projetos">
+              <Projects />
+            </ModuleGate>
+          }
+        />
+        <Route
+          path="/projetos/:id/roadmap"
+          element={
+            <ModuleGate module="projetos">
+              <Roadmap />
+            </ModuleGate>
+          }
+        />
+
+        {/* Módulo Financeiro */}
+        <Route
+          path="/financeiro"
+          element={
+            <ModuleGate module="financeiro">
+              <Financeiro />
+            </ModuleGate>
+          }
+        />
+
+        {/* Gestão de colaboradores (somente admin) */}
+        <Route
+          path="/colaboradores"
+          element={
+            <AdminOnly>
+              <Colaboradores />
+            </AdminOnly>
+          }
+        />
+
         <Route path="/conta" element={<Account />} />
       </Route>
 

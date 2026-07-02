@@ -3,8 +3,11 @@
 import { prisma } from '../lib/prisma.js'
 
 export const userRepository = {
+  list: () => prisma.user.findMany({ orderBy: { createdAt: 'asc' } }),
   findByEmail: (email) => prisma.user.findUnique({ where: { email } }),
   findById: (id) => prisma.user.findUnique({ where: { id } }),
   create: (data) => prisma.user.create({ data }),
   update: (id, data) => prisma.user.update({ where: { id }, data }),
+  remove: (id) => prisma.user.delete({ where: { id } }),
+  countAdmins: () => prisma.user.count({ where: { role: 'admin' } }),
 }

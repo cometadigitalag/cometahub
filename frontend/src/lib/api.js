@@ -54,6 +54,14 @@ export const projectsApi = {
   remove: (id) => api.del(`/projects/${id}`),
 }
 
+export const usersApi = {
+  modules: () => api.get('/users/modules'),
+  list: () => api.get('/users'),
+  create: (data) => api.post('/users', data),
+  update: (id, data) => api.put(`/users/${id}`, data),
+  remove: (id) => api.del(`/users/${id}`),
+}
+
 export const obligationsApi = {
   listByProject: (projectId) => api.get(`/projects/${projectId}/obligations`),
   create: (projectId, data) => api.post(`/projects/${projectId}/obligations`, data),

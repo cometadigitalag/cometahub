@@ -17,12 +17,16 @@ datasource db {
 
 // Usuário do painel interno (equipe da agência).
 model User {
-  id        String   @id @default(cuid())
-  nome      String
-  email     String   @unique
-  senha     String // hash bcrypt
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(cuid())
+  nome        String   @db.VarChar(191)
+  email       String   @unique @db.VarChar(191)
+  senha       String // hash bcrypt
+  role        String   @default("colaborador") @db.VarChar(20) // admin | colaborador
+  // Módulos que o colaborador enxerga (CSV de chaves: "projetos,financeiro").
+  // Ignorado para admin (admin vê tudo). Ver src/config/modules.js.
+  permissions String   @default("") @db.VarChar(500)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 // Projeto da agência.
