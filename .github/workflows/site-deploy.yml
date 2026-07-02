@@ -1,0 +1,53 @@
+name: Deploy Site (S3 + CloudFront)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'vite.config.js'
+      - 'package.json'
+      - '.github/workflows/site-deploy.yml'
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  S3_BUCKET: cometahub.com
+  CLOUDFRONT_DISTRIBUTION_ID: E96H1AJAJNCJQ
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instala e builda
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configura credenciais AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Sync para o S3
+        run: |
+          aws s3 sync dist s3://$S3_BUCKET --delete --exclude index.html \
+            --cache-control "public,max-age=31536000,immutable"
+          aws s3 cp dist/index.html s3://$S3_BUCKET/index.html \
+            --cache-control "no-cache" --content-type "text/html"
+
+      - name: Invalida cache do CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*" >/dev/null
