@@ -1,8 +1,9 @@
 // =========================================================================
 // SCHEMA PRISMA — CometaHub
-// Agora: SQLite (arquivo local). Depois: PostgreSQL no AWS RDS.
-// Para migrar, troque provider p/ "postgresql" e ajuste DATABASE_URL no .env.
-// Obs.: SQLite não suporta enums; usamos String + valores validados no código.
+// Banco: MySQL (AWS RDS compartilhado `bichomaster-db`, schema `cometahub`).
+// A DATABASE_URL é montada a partir de DB_HOST/DB_USERNAME/DB_PASSWORD/
+// DB_DATABASE (ver src/config/env.js) — mesmo padrão de secrets da infra.
+// Obs.: usamos String + valores validados no código (sem enums nativos).
 // =========================================================================
 
 generator client {
@@ -10,7 +11,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
@@ -27,10 +28,10 @@ model User {
 // Projeto da agência.
 model Project {
   id          String       @id @default(cuid())
-  nome        String
-  cliente     String       @default("")
-  descricao   String       @default("")
-  status      String       @default("ativo") // ativo | pausado | concluido
+  nome        String       @db.VarChar(191)
+  cliente     String       @default("") @db.VarChar(191)
+  descricao   String       @default("") @db.VarChar(2000)
+  status      String       @default("ativo") @db.VarChar(30) // ativo | pausado | concluido
   dataInicio  String       @default("") // "YYYY-MM-DD"
   dataFim     String       @default("") // "YYYY-MM-DD"
   obligations Obligation[]
@@ -43,12 +44,12 @@ model Obligation {
   id          String   @id @default(cuid())
   projectId   String
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  titulo      String
-  descricao   String   @default("")
-  responsavel String   @default("")
-  prazo       String   @default("") // "YYYY-MM-DD"
-  prioridade  String   @default("media") // baixa | media | alta
-  status      String   @default("pendente") // pendente | em_andamento | concluido
+  titulo      String   @db.VarChar(191)
+  descricao   String   @default("") @db.VarChar(2000)
+  responsavel String   @default("") @db.VarChar(191)
+  prazo       String   @default("") @db.VarChar(10) // "YYYY-MM-DD"
+  prioridade  String   @default("media") @db.VarChar(20) // baixa | media | alta
+  status      String   @default("pendente") @db.VarChar(20) // pendente | em_andamento | concluido
   ordem       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

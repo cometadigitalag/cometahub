@@ -4,6 +4,7 @@
 // Rode com: npm run db:seed
 // =========================================================================
 import 'dotenv/config'
+import '../src/config/env.js' // monta a DATABASE_URL (MySQL) a partir das partes
 import bcrypt from 'bcryptjs'
 import { PrismaClient } from '@prisma/client'
 
