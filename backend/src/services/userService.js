@@ -27,6 +27,12 @@ export const userService = {
     return users.map(publico)
   },
 
+  // Lista enxuta para preencher selects (ex.: responsável por uma obrigação).
+  async listAssignable() {
+    const users = await userRepository.list()
+    return users.map((u) => ({ id: u.id, nome: u.nome, email: u.email }))
+  },
+
   async create({ nome, email, senha, role, permissions }) {
     if (!nome || !String(nome).trim()) throw badRequest('Informe o nome.')
     if (!email || !String(email).trim()) throw badRequest('Informe o e-mail.')

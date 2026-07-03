@@ -1,7 +1,7 @@
 // Roadmap de obrigações de um projeto — quadro kanban (3 colunas de status).
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { projectsApi, obligationsApi } from '../lib/api'
+import { projectsApi, obligationsApi, usersApi } from '../lib/api'
 import {
   OBLIGATION_STATUS,
   OBLIGATION_PRIORITY,
@@ -16,6 +16,7 @@ const vazio = {
   titulo: '',
   descricao: '',
   responsavel: '',
+  responsavelEmail: '',
   prazo: '',
   prioridade: 'media',
   status: 'pendente',
@@ -156,9 +157,14 @@ export default function Roadmap() {
                       {item.descricao && <p className={styles.cardDesc}>{item.descricao}</p>}
 
                       <div className={styles.cardMeta}>
-                        {item.responsavel && <span>👤 {item.responsavel}</span>}
+                        {item.responsavel && (
+                          <span title={item.responsavelEmail || ''}>👤 {item.responsavel}</span>
+                        )}
                         {item.prazo && <span>📅 {formatDate(item.prazo)}</span>}
                       </div>
+                      {item.responsavelEmail && (
+                        <span className={styles.cardEmail}>✉ {item.responsavelEmail}</span>
+                      )}
 
                       <div className={styles.moveRow}>
                         <button
@@ -205,10 +211,30 @@ export default function Roadmap() {
 // --- Formulário de obrigação (criar/editar) ----------------------------
 function ObligationForm({ projectId, obrigacao, onClose, onSaved }) {
   const [form, setForm] = useState(obrigacao ? { ...vazio, ...obrigacao } : vazio)
+  const [colaboradores, setColaboradores] = useState([])
   const [erro, setErro] = useState('')
   const [salvando, setSalvando] = useState(false)
 
   const set = (campo) => (e) => setForm((f) => ({ ...f, [campo]: e.target.value }))
+
+  // Carrega a lista de colaboradores para o select de responsável.
+  useEffect(() => {
+    usersApi
+      .assignable()
+      .then(setColaboradores)
+      .catch(() => setColaboradores([]))
+  }, [])
+
+  // Ao escolher um responsável, guarda nome + e-mail (snapshot).
+  function selecionarResponsavel(e) {
+    const email = e.target.value
+    const u = colaboradores.find((c) => c.email === email)
+    setForm((f) => ({
+      ...f,
+      responsavelEmail: email,
+      responsavel: u ? u.nome : '',
+    }))
+  }
 
   async function salvar(e) {
     e.preventDefault()
@@ -219,6 +245,7 @@ function ObligationForm({ projectId, obrigacao, onClose, onSaved }) {
         titulo: form.titulo,
         descricao: form.descricao,
         responsavel: form.responsavel,
+        responsavelEmail: form.responsavelEmail,
         prazo: form.prazo,
         prioridade: form.prioridade,
         status: form.status,
@@ -251,7 +278,26 @@ function ObligationForm({ projectId, obrigacao, onClose, onSaved }) {
         <div className={styles.formRow}>
           <div className="field">
             <label>Responsável</label>
-            <input value={form.responsavel} onChange={set('responsavel')} placeholder="Nome" />
+            <select value={form.responsavelEmail} onChange={selecionarResponsavel}>
+              <option value="">— Sem responsável —</option>
+              {/* Mantém o responsável atual mesmo que não esteja mais na lista. */}
+              {form.responsavelEmail &&
+                !colaboradores.some((c) => c.email === form.responsavelEmail) && (
+                  <option value={form.responsavelEmail}>
+                    {form.responsavel || form.responsavelEmail}
+                  </option>
+                )}
+              {colaboradores.map((c) => (
+                <option key={c.id} value={c.email}>
+                  {c.nome} ({c.email})
+                </option>
+              ))}
+            </select>
+            {form.responsavelEmail && (
+              <span className="muted" style={{ fontSize: '0.75rem' }}>
+                {form.responsavelEmail}
+              </span>
+            )}
           </div>
           <div className="field">
             <label>Prazo</label>

@@ -143,6 +143,15 @@
   background: var(--c);
   flex-shrink: 0;
 }
+/* Obrigações do roadmap: borda tracejada + pin, para distinguir das rotinas. */
+.occOb {
+  border-style: dashed;
+}
+.occPin {
+  font-size: 0.68rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
 .occTime {
   color: var(--color-text-muted);
   font-variant-numeric: tabular-nums;

@@ -65,6 +65,7 @@ export const routinesApi = {
 }
 
 export const usersApi = {
+  assignable: () => api.get('/users/assignable'),
   modules: () => api.get('/users/modules'),
   list: () => api.get('/users'),
   create: (data) => api.post('/users', data),

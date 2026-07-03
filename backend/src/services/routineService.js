@@ -1,6 +1,7 @@
 // Regra de negócio das rotinas recorrentes (agenda) + montagem do calendário.
 import { routineRepository } from '../repositories/routineRepository.js'
 import { projectRepository } from '../repositories/projectRepository.js'
+import { obligationRepository } from '../repositories/obligationRepository.js'
 import { expandRange } from '../lib/recurrence.js'
 import { badRequest, notFound } from '../lib/httpError.js'
 
@@ -111,6 +112,7 @@ export const routineService = {
       const r = byId.get(o.routineId)
       const status = statusMap.get(`${o.routineId}|${o.date}`) || 'pendente'
       ;(dias[o.date] = dias[o.date] || []).push({
+        kind: 'rotina',
         routineId: r.id,
         titulo: r.titulo,
         descricao: r.descricao,
@@ -121,9 +123,28 @@ export const routineService = {
         status,
       })
     }
-    // Ordena cada dia por horário.
+
+    // Inclui as obrigações (roadmap) com prazo dentro do intervalo.
+    const obrigacoes = await obligationRepository.listByProject(projectId)
+    for (const ob of obrigacoes) {
+      if (ob.prazo && ob.prazo >= start && ob.prazo <= end) {
+        ;(dias[ob.prazo] = dias[ob.prazo] || []).push({
+          kind: 'obrigacao',
+          obligationId: ob.id,
+          titulo: ob.titulo,
+          descricao: ob.descricao,
+          responsavel: ob.responsavel,
+          responsavelEmail: ob.responsavelEmail,
+          prioridade: ob.prioridade,
+          date: ob.prazo,
+          status: ob.status,
+        })
+      }
+    }
+
+    // Ordena cada dia: por horário; obrigações (sem horário) vão ao fim.
     for (const d of Object.keys(dias)) {
-      dias[d].sort((a, b) => (a.horario || '99').localeCompare(b.horario || '99'))
+      dias[d].sort((a, b) => (a.horario || '99:99').localeCompare(b.horario || '99:99'))
     }
     return { routines, dias }
   },

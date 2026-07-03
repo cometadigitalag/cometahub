@@ -49,9 +49,10 @@ model Obligation {
   id          String   @id @default(cuid())
   projectId   String
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  titulo      String   @db.VarChar(191)
-  descricao   String   @default("") @db.VarChar(2000)
-  responsavel String   @default("") @db.VarChar(191)
+  titulo          String   @db.VarChar(191)
+  descricao       String   @default("") @db.VarChar(2000)
+  responsavel     String   @default("") @db.VarChar(191) // nome (snapshot)
+  responsavelEmail String  @default("") @db.VarChar(191) // e-mail do responsável
   prazo       String   @default("") @db.VarChar(10) // "YYYY-MM-DD"
   prioridade  String   @default("media") @db.VarChar(20) // baixa | media | alta
   status      String   @default("pendente") @db.VarChar(20) // pendente | em_andamento | concluido

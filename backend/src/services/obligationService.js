@@ -16,6 +16,7 @@ function normalizar(input, { parcial = false } = {}) {
   }
   if (input.descricao !== undefined) data.descricao = String(input.descricao).trim()
   if (input.responsavel !== undefined) data.responsavel = String(input.responsavel).trim()
+  if (input.responsavelEmail !== undefined) data.responsavelEmail = String(input.responsavelEmail).trim()
   if (input.prazo !== undefined) data.prazo = String(input.prazo)
   if (input.ordem !== undefined) data.ordem = Number(input.ordem) || 0
   if (input.prioridade !== undefined) {

@@ -4,6 +4,9 @@ import { authRequired, adminRequired } from '../middleware/auth.js'
 
 const router = Router()
 
+// Lista enxuta de colaboradores para selects (qualquer usuário logado).
+router.get('/assignable', authRequired, userController.assignable)
+
 // Gestão de colaboradores: exclusiva de administradores.
 router.use(authRequired, adminRequired)
 

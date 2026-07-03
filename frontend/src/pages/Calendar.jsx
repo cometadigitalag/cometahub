@@ -2,13 +2,14 @@
 // rotinas recorrentes. Dá para marcar cada ocorrência como feita/pendente e
 // gerenciar as rotinas (criar/editar/excluir).
 import { useEffect, useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { projectsApi, routinesApi } from '../lib/api'
 import {
   WEEKDAYS,
   ROUTINE_TYPES,
   ROUTINE_COLORS,
   MONTH_NAMES,
+  OBLIGATION_PRIORITY,
   recurrenceLabel,
 } from '../lib/constants'
 import Modal from '../components/Modal'
@@ -33,6 +34,7 @@ const vazio = {
 
 export default function Calendar() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const hoje = fmt(new Date())
   const [ref, setRef] = useState(() => {
     const d = new Date()
@@ -176,20 +178,34 @@ export default function Calendar() {
                     <div key={ds} className={`${styles.day} ${outro ? styles.outside : ''} ${ds === hoje ? styles.today : ''}`}>
                       <span className={styles.dayNum}>{d.getDate()}</span>
                       <div className={styles.occs}>
-                        {occs.map((o) => (
-                          <button
-                            key={o.routineId}
-                            className={`${styles.occ} ${o.status === 'concluido' ? styles.done : ''}`}
-                            style={{ '--c': o.cor }}
-                            onClick={() => toggle(o)}
-                            title={`${o.titulo}${o.horario ? ' • ' + o.horario : ''} — clique para marcar ${o.status === 'concluido' ? 'pendente' : 'feito'}`}
-                          >
-                            <span className={styles.occDot} />
-                            {o.horario && <span className={styles.occTime}>{o.horario}</span>}
-                            <span className={styles.occTitle}>{o.titulo}</span>
-                            {o.status === 'concluido' && <span className={styles.check}>✓</span>}
-                          </button>
-                        ))}
+                        {occs.map((o) =>
+                          o.kind === 'obrigacao' ? (
+                            <button
+                              key={`ob-${o.obligationId}`}
+                              className={`${styles.occ} ${styles.occOb} ${o.status === 'concluido' ? styles.done : ''}`}
+                              style={{ '--c': (OBLIGATION_PRIORITY[o.prioridade] || {}).color || '#3b82f6' }}
+                              onClick={() => navigate(`/projetos/${id}/roadmap`)}
+                              title={`Obrigação: ${o.titulo}${o.responsavel ? ' • ' + o.responsavel : ''} — abrir no Roadmap`}
+                            >
+                              <span className={styles.occPin}>📌</span>
+                              <span className={styles.occTitle}>{o.titulo}</span>
+                              {o.status === 'concluido' && <span className={styles.check}>✓</span>}
+                            </button>
+                          ) : (
+                            <button
+                              key={`rt-${o.routineId}`}
+                              className={`${styles.occ} ${o.status === 'concluido' ? styles.done : ''}`}
+                              style={{ '--c': o.cor }}
+                              onClick={() => toggle(o)}
+                              title={`${o.titulo}${o.horario ? ' • ' + o.horario : ''} — clique para marcar ${o.status === 'concluido' ? 'pendente' : 'feito'}`}
+                            >
+                              <span className={styles.occDot} />
+                              {o.horario && <span className={styles.occTime}>{o.horario}</span>}
+                              <span className={styles.occTitle}>{o.titulo}</span>
+                              {o.status === 'concluido' && <span className={styles.check}>✓</span>}
+                            </button>
+                          ),
+                        )}
                       </div>
                     </div>
                   )
@@ -200,7 +216,8 @@ export default function Calendar() {
 
           {carregando && <p className="muted" style={{ marginTop: '0.8rem' }}>Atualizando…</p>}
           <p className="muted" style={{ marginTop: '0.8rem', fontSize: '0.8rem' }}>
-            Clique numa rotina do dia para marcar como <strong>feita</strong> ou <strong>pendente</strong>.
+            Clique numa <strong>rotina</strong> para marcar feita/pendente. As <strong>📌 obrigações</strong> do
+            Roadmap aparecem na data do prazo (clique para abrir no Roadmap).
           </p>
         </>
       )}

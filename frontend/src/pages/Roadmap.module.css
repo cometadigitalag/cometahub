@@ -139,6 +139,14 @@
   font-size: 0.74rem;
   color: var(--color-text-dim);
 }
+.cardEmail {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--color-text-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .moveRow {
   display: flex;
   gap: 0.4rem;

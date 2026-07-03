@@ -14,6 +14,10 @@ export const userController = {
     res.json(await userService.list())
   }),
 
+  assignable: h(async (req, res) => {
+    res.json(await userService.listAssignable())
+  }),
+
   create: h(async (req, res) => {
     res.status(201).json(await userService.create(req.body))
   }),
