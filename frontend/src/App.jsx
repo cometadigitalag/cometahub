@@ -9,6 +9,7 @@ import Projects from './pages/Projects'
 import Roadmap from './pages/Roadmap'
 import Calendar from './pages/Calendar'
 import ProjectTeam from './pages/ProjectTeam'
+import ProjectFinance from './pages/ProjectFinance'
 import Financeiro from './pages/Financeiro'
 import Colaboradores from './pages/Colaboradores'
 import Account from './pages/Account'
@@ -58,6 +59,14 @@ export default function App() {
           element={
             <ModuleGate module="projetos">
               <ProjectTeam />
+            </ModuleGate>
+          }
+        />
+        <Route
+          path="/projetos/:id/financeiro"
+          element={
+            <ModuleGate module="financeiro">
+              <ProjectFinance />
             </ModuleGate>
           }
         />

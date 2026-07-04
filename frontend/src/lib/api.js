@@ -95,6 +95,18 @@ export const membersApi = {
   remove: (id) => api.del(`/members/${id}`),
 }
 
+export const financeApi = {
+  summary: (mes) => api.get(`/finance/summary?mes=${mes}`),
+  projectFinance: (projectId, mes) => api.get(`/finance/projects/${projectId}?mes=${mes}`),
+  createEntry: (data) => api.post('/finance/entries', data),
+  updateEntry: (id, data) => api.put(`/finance/entries/${id}`, data),
+  removeEntry: (id) => api.del(`/finance/entries/${id}`),
+  listRecurring: (projectId) => api.get(`/finance/projects/${projectId}/recurring`),
+  createRecurring: (projectId, data) => api.post(`/finance/projects/${projectId}/recurring`, data),
+  updateRecurring: (id, data) => api.put(`/finance/recurring/${id}`, data),
+  removeRecurring: (id) => api.del(`/finance/recurring/${id}`),
+}
+
 export const obligationsApi = {
   listByProject: (projectId) => api.get(`/projects/${projectId}/obligations`),
   create: (projectId, data) => api.post(`/projects/${projectId}/obligations`, data),

@@ -73,6 +73,54 @@ export function recurrenceLabel(r) {
   return ''
 }
 
+// --- Financeiro -----------------------------------------------------------
+// Formata centavos (Int) para moeda BRL. Ex.: 150050 -> "R$ 1.500,50".
+export function formatBRL(centavos) {
+  return ((centavos || 0) / 100).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
+}
+
+// Converte texto em reais ("1.500,50" ou "1500.5") para centavos (Int).
+export function reaisToCents(valor) {
+  if (typeof valor === 'number') return Math.round(valor * 100)
+  const s = String(valor || '')
+    .replace(/[^\d,.-]/g, '')
+    .replace(/\./g, '')
+    .replace(',', '.')
+  const n = parseFloat(s)
+  return Number.isFinite(n) ? Math.round(n * 100) : 0
+}
+
+// Chave do mês atual "YYYY-MM".
+export function mesAtual() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+// Navega N meses a partir de "YYYY-MM".
+export function shiftMes(mes, delta) {
+  const [y, m] = mes.split('-').map(Number)
+  const total = y * 12 + (m - 1) + delta
+  const ny = Math.floor(total / 12)
+  const nm = (total % 12) + 1
+  return `${ny}-${String(nm).padStart(2, '0')}`
+}
+
+export const ENTRY_STATUS = {
+  pago: { label: 'Pago', color: '#22c55e' },
+  pendente: { label: 'Pendente', color: '#eab308' },
+  atrasado: { label: 'Atrasado', color: '#e10600' },
+}
+
+// Status efetivo considerando vencimento (pendente vencido = atrasado).
+export function statusEfetivo(entry, hojeStr) {
+  if (entry.status === 'pago') return 'pago'
+  if (entry.vencimento && entry.vencimento < hojeStr) return 'atrasado'
+  return 'pendente'
+}
+
 // --- Permissões / módulos -------------------------------------------------
 // Catálogo de módulos que um colaborador pode receber (espelha o backend).
 export const MODULES = [

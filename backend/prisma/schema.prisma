@@ -60,6 +60,8 @@ model Project {
   obligations Obligation[]
   routines    Routine[]
   members     ProjectMember[]
+  financeEntries   FinanceEntry[]
+  recurringCharges RecurringCharge[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }
@@ -120,4 +122,44 @@ model RoutineCompletion {
 
   @@unique([routineId, data])
   @@index([routineId])
+}
+
+// Lançamento financeiro (receita ou despesa). Valor em centavos (Int).
+// projectId nulo = lançamento geral da agência (não vinculado a uma empresa).
+model FinanceEntry {
+  id            String   @id @default(cuid())
+  projectId     String?
+  project       Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tipo          String   @db.VarChar(10) // receita | despesa
+  descricao     String   @default("") @db.VarChar(191)
+  valorCentavos Int      @default(0)
+  vencimento    String   @default("") @db.VarChar(10) // "YYYY-MM-DD"
+  status        String   @default("pendente") @db.VarChar(10) // pendente | pago
+  dataPagamento String   @default("") @db.VarChar(10)
+  // Vínculo com a mensalidade recorrente que gerou este lançamento (se houver).
+  recurringId   String?
+  recurring     RecurringCharge? @relation(fields: [recurringId], references: [id], onDelete: SetNull)
+  mesRef        String?  @db.VarChar(7) // "YYYY-MM" (dedupe da geração recorrente)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([recurringId, mesRef])
+  @@index([projectId])
+  @@index([vencimento])
+}
+
+// Mensalidade recorrente de um cliente (contrato que repete todo mês).
+model RecurringCharge {
+  id            String   @id @default(cuid())
+  projectId     String
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  descricao     String   @default("") @db.VarChar(191)
+  valorCentavos Int      @default(0)
+  diaVencimento Int      @default(5) // dia do mês (1..31)
+  ativo         Boolean  @default(true)
+  entries       FinanceEntry[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([projectId])
 }

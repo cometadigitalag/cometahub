@@ -1,0 +1,272 @@
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+.head h1 {
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  margin-bottom: 0.2rem;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.4rem;
+}
+.monthNav {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+}
+.navBtn {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--color-text);
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: border-color var(--transition), color var(--transition);
+}
+.navBtn:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-glow);
+}
+
+/* --- Cards de resumo --- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.card {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.cardLabel {
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+}
+.cardValor {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.secTitle {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  margin: 1.6rem 0 0.9rem;
+}
+.secTitleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.back {
+  color: var(--color-text-dim);
+  font-size: 0.85rem;
+  transition: color var(--transition);
+}
+.back:hover {
+  color: var(--color-primary-glow);
+}
+
+/* --- Listas (empresas / lançamentos) --- */
+.list {
+  overflow: hidden;
+}
+.empresaRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1.2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.empresaRow:last-child {
+  border-bottom: none;
+}
+.empresaNome {
+  flex: 1;
+  font-size: 0.9rem;
+}
+.empresaMeta {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+.empresaSaldo {
+  font-weight: 700;
+  font-size: 0.92rem;
+  min-width: 110px;
+  text-align: right;
+}
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.entry:last-child {
+  border-bottom: none;
+}
+.arrow {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.up {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+.down {
+  background: rgba(225, 6, 0, 0.15);
+  color: #e10600;
+}
+.entryInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.entryInfo strong {
+  font-size: 0.9rem;
+}
+.entryInfo span {
+  font-size: 0.76rem;
+}
+.valor {
+  font-weight: 700;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.vReceita {
+  color: #22c55e;
+}
+.vDespesa {
+  color: #e10600;
+}
+.statusBtn {
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.entryActions {
+  display: flex;
+  gap: 0.1rem;
+}
+.iconBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-dim);
+  padding: 0.3rem 0.4rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  transition: background var(--transition), color var(--transition);
+}
+.iconBtn:hover {
+  background: var(--glass-bg);
+  color: #fff;
+}
+
+/* --- Formulário --- */
+.tipoToggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.tipoBtn {
+  flex: 1;
+  padding: 0.6rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-border);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-muted);
+  font-weight: 600;
+  font-size: 0.88rem;
+  transition: all var(--transition);
+}
+.tipoReceita {
+  border-color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  color: #22c55e;
+}
+.tipoDespesa {
+  border-color: #e10600;
+  background: rgba(225, 6, 0, 0.12);
+  color: #ff6b6b;
+}
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  margin-top: 0.6rem;
+}
+
+/* --- Financeiro da empresa (mensalidades) --- */
+.recorrentes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.recRow {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem 1.2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.recRow:last-child {
+  border-bottom: none;
+}
+.recInfo {
+  flex: 1;
+}
+.recInfo strong {
+  font-size: 0.9rem;
+}
+.recInfo span {
+  display: block;
+  font-size: 0.76rem;
+  color: var(--color-text-dim);
+}
+.recValor {
+  font-weight: 700;
+  color: #22c55e;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 780px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,12 +1,19 @@
-// Abas de navegação dentro de um projeto: Roadmap | Calendário.
+// Abas de navegação dentro de um projeto: Roadmap | Calendário | Equipe | Financeiro.
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { canModule } from '../lib/constants'
 import styles from './ProjectTabs.module.css'
 
 export default function ProjectTabs({ id, active }) {
+  const { user } = useAuth()
   const tabs = [
     { key: 'roadmap', label: 'Roadmap', to: `/projetos/${id}/roadmap` },
     { key: 'calendario', label: 'Calendário', to: `/projetos/${id}/calendario` },
     { key: 'equipe', label: 'Equipe', to: `/projetos/${id}/equipe` },
+    // Financeiro só aparece para quem tem o módulo financeiro.
+    ...(canModule(user, 'financeiro')
+      ? [{ key: 'financeiro', label: 'Financeiro', to: `/projetos/${id}/financeiro` }]
+      : []),
   ]
   return (
     <div className={styles.tabs}>

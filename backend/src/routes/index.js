@@ -5,6 +5,7 @@ import projectRoutes from './projectRoutes.js'
 import obligationRoutes from './obligationRoutes.js'
 import routineRoutes from './routineRoutes.js'
 import memberRoutes from './memberRoutes.js'
+import financeRoutes from './financeRoutes.js'
 import userRoutes from './userRoutes.js'
 
 const router = Router()
@@ -16,5 +17,6 @@ router.use('/projects', projectRoutes)
 router.use('/obligations', obligationRoutes)
 router.use('/routines', routineRoutes)
 router.use('/members', memberRoutes)
+router.use('/finance', financeRoutes)
 
 export default router
