@@ -2,7 +2,8 @@ import { Router } from 'express'
 import { projectController } from '../controllers/projectController.js'
 import { obligationController } from '../controllers/obligationController.js'
 import { routineController } from '../controllers/routineController.js'
-import { authRequired, requireModule } from '../middleware/auth.js'
+import { memberController } from '../controllers/memberController.js'
+import { authRequired, requireModule, adminRequired } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -24,5 +25,9 @@ router.put('/:projectId/obligations/reorder', obligationController.reorder)
 router.get('/:projectId/routines', routineController.listByProject)
 router.post('/:projectId/routines', routineController.create)
 router.get('/:projectId/calendar', routineController.calendar)
+
+// Equipe do projeto: ver = qualquer um com o módulo; atribuir = só admin.
+router.get('/:projectId/members', memberController.listByProject)
+router.post('/:projectId/members', adminRequired, memberController.add)
 
 export default router

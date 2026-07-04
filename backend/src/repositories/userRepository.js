@@ -10,4 +10,12 @@ export const userRepository = {
   update: (id, data) => prisma.user.update({ where: { id }, data }),
   remove: (id) => prisma.user.delete({ where: { id } }),
   countAdmins: () => prisma.user.count({ where: { role: 'admin' } }),
+
+  // Empresas/projetos onde o usuário está atribuído (com dados do projeto).
+  membershipsByUser: (userId) =>
+    prisma.projectMember.findMany({
+      where: { userId },
+      include: { project: true },
+      orderBy: { createdAt: 'asc' },
+    }),
 }

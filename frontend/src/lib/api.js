@@ -71,6 +71,28 @@ export const usersApi = {
   create: (data) => api.post('/users', data),
   update: (id, data) => api.put(`/users/${id}`, data),
   remove: (id) => api.del(`/users/${id}`),
+  assignments: (id) => api.get(`/users/${id}/assignments`),
+  // Upload de foto (multipart) — não usa o wrapper JSON.
+  uploadPhoto: async (id, file) => {
+    const form = new FormData()
+    form.append('foto', file)
+    const token = tokenStore.get()
+    const res = await fetch(`${BASE}/api/users/${id}/photo`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+      body: form,
+    })
+    const data = await res.json().catch(() => ({}))
+    if (!res.ok) throw new Error(data.error || 'Falha no upload da foto')
+    return data
+  },
+}
+
+export const membersApi = {
+  listByProject: (projectId) => api.get(`/projects/${projectId}/members`),
+  add: (projectId, data) => api.post(`/projects/${projectId}/members`, data),
+  update: (id, data) => api.put(`/members/${id}`, data),
+  remove: (id) => api.del(`/members/${id}`),
 }
 
 export const obligationsApi = {

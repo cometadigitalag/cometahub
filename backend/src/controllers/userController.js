@@ -29,4 +29,16 @@ export const userController = {
   remove: h(async (req, res) => {
     res.json(await userService.remove(req.params.id, req.user.id))
   }),
+
+  // Empresas atribuídas ao colaborador + função em cada uma.
+  assignments: h(async (req, res) => {
+    res.json(await userService.assignments(req.params.id))
+  }),
+
+  // Upload da foto de perfil (multipart, campo "foto").
+  uploadPhoto: h(async (req, res) => {
+    // stamp para versionar a chave (invalida cache do CloudFront ao trocar).
+    const stamp = Date.now().toString(36)
+    res.json(await userService.setPhoto(req.params.id, req.file, stamp))
+  }),
 }

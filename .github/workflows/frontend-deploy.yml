@@ -43,7 +43,8 @@ jobs:
       - name: Sync para o S3
         working-directory: frontend
         run: |
-          aws s3 sync dist s3://$S3_BUCKET --delete --exclude index.html \
+          # Exclui fotos/* do --delete para não apagar as fotos de perfil enviadas.
+          aws s3 sync dist s3://$S3_BUCKET --delete --exclude index.html --exclude "fotos/*" \
             --cache-control "public,max-age=31536000,immutable"
           aws s3 cp dist/index.html s3://$S3_BUCKET/index.html \
             --cache-control "no-cache" --content-type "text/html"

@@ -22,11 +22,30 @@ model User {
   email       String   @unique @db.VarChar(191)
   senha       String // hash bcrypt
   role        String   @default("colaborador") @db.VarChar(20) // admin | colaborador
+  cargo       String   @default("") @db.VarChar(100) // cargo/título geral (ex.: Designer)
+  fotoUrl     String   @default("") @db.VarChar(500) // URL da foto (S3/CloudFront)
   // Módulos que o colaborador enxerga (CSV de chaves: "projetos,financeiro").
   // Ignorado para admin (admin vê tudo). Ver src/config/modules.js.
   permissions String   @default("") @db.VarChar(500)
+  members     ProjectMember[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// Atribuição de um colaborador a um projeto/empresa, com a função dele ali.
+model ProjectMember {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  funcao    String   @default("") @db.VarChar(100) // função nesta empresa (ex.: Social Media)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([projectId, userId])
+  @@index([projectId])
+  @@index([userId])
 }
 
 // Projeto da agência.
@@ -40,6 +59,7 @@ model Project {
   dataFim     String       @default("") // "YYYY-MM-DD"
   obligations Obligation[]
   routines    Routine[]
+  members     ProjectMember[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 }

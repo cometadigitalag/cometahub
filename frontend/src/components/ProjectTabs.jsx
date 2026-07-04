@@ -6,6 +6,7 @@ export default function ProjectTabs({ id, active }) {
   const tabs = [
     { key: 'roadmap', label: 'Roadmap', to: `/projetos/${id}/roadmap` },
     { key: 'calendario', label: 'Calendário', to: `/projetos/${id}/calendario` },
+    { key: 'equipe', label: 'Equipe', to: `/projetos/${id}/equipe` },
   ]
   return (
     <div className={styles.tabs}>

@@ -1,0 +1,94 @@
+.back {
+  display: inline-block;
+  color: var(--color-text-dim);
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  transition: color var(--transition);
+}
+.back:hover {
+  color: var(--color-primary-glow);
+}
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.head h1 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+}
+.head p {
+  font-size: 0.88rem;
+  margin-top: 0.2rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.1rem;
+  transition: transform var(--transition), border-color var(--transition);
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(225, 6, 0, 0.3);
+}
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+.info strong {
+  font-size: 0.95rem;
+}
+.cargo {
+  font-size: 0.78rem;
+  color: var(--color-primary-glow);
+}
+.funcao {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-top: 0.15rem;
+}
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.iconBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-dim);
+  padding: 0.3rem 0.4rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  transition: background var(--transition), color var(--transition);
+}
+.iconBtn:hover {
+  background: var(--glass-bg);
+  color: #fff;
+}
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.7rem;
+  margin-top: 0.6rem;
+}

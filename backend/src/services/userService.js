@@ -2,6 +2,7 @@
 import bcrypt from 'bcryptjs'
 import { userRepository } from '../repositories/userRepository.js'
 import { serializePermissions, parsePermissions } from '../config/modules.js'
+import { uploadPhoto, isImage } from '../lib/s3.js'
 import { badRequest, notFound, conflict } from '../lib/httpError.js'
 
 export const ROLES = ['admin', 'colaborador']
@@ -11,6 +12,8 @@ const publico = (u) => ({
   nome: u.nome,
   email: u.email,
   role: u.role,
+  cargo: u.cargo,
+  fotoUrl: u.fotoUrl,
   permissions: parsePermissions(u.permissions),
   createdAt: u.createdAt,
 })
@@ -30,10 +33,38 @@ export const userService = {
   // Lista enxuta para preencher selects (ex.: responsável por uma obrigação).
   async listAssignable() {
     const users = await userRepository.list()
-    return users.map((u) => ({ id: u.id, nome: u.nome, email: u.email }))
+    return users.map((u) => ({ id: u.id, nome: u.nome, email: u.email, cargo: u.cargo, fotoUrl: u.fotoUrl }))
   },
 
-  async create({ nome, email, senha, role, permissions }) {
+  // Empresas/projetos onde o colaborador está atribuído + a função em cada um.
+  async assignments(userId) {
+    const alvo = await userRepository.findById(userId)
+    if (!alvo) throw notFound('Usuário não encontrado.')
+    const membros = await userRepository.membershipsByUser(userId)
+    return {
+      user: publico(alvo),
+      empresas: membros.map((m) => ({
+        projectId: m.projectId,
+        nome: m.project.nome,
+        cliente: m.project.cliente,
+        status: m.project.status,
+        funcao: m.funcao,
+      })),
+    }
+  },
+
+  // Salva a foto de perfil (upload S3) e devolve o usuário atualizado.
+  async setPhoto(userId, file, stamp) {
+    const alvo = await userRepository.findById(userId)
+    if (!alvo) throw notFound('Usuário não encontrado.')
+    if (!file) throw badRequest('Envie um arquivo de imagem.')
+    if (!isImage(file.mimetype)) throw badRequest('Formato inválido. Use JPG, PNG, WEBP ou GIF.')
+    const fotoUrl = await uploadPhoto(userId, file.buffer, file.mimetype, stamp)
+    const user = await userRepository.update(userId, { fotoUrl })
+    return publico(user)
+  },
+
+  async create({ nome, email, senha, role, permissions, cargo, fotoUrl }) {
     if (!nome || !String(nome).trim()) throw badRequest('Informe o nome.')
     if (!email || !String(email).trim()) throw badRequest('Informe o e-mail.')
     if (!senha || senha.length < 6) throw badRequest('A senha deve ter ao menos 6 caracteres.')
@@ -50,13 +81,15 @@ export const userService = {
       email: emailNorm,
       senha: await bcrypt.hash(senha, 10),
       role: papel,
+      cargo: cargo ? String(cargo).trim() : '',
+      fotoUrl: fotoUrl ? String(fotoUrl).trim() : '',
       // admin vê tudo; colaborador guarda os módulos marcados.
       permissions: papel === 'admin' ? '' : serializePermissions(permissions),
     })
     return publico(user)
   },
 
-  async update(id, { nome, email, senha, role, permissions }) {
+  async update(id, { nome, email, senha, role, permissions, cargo, fotoUrl }) {
     const alvo = await userRepository.findById(id)
     if (!alvo) throw notFound('Usuário não encontrado.')
     validarRole(role)
@@ -73,6 +106,8 @@ export const userService = {
       if (senha.length < 6) throw badRequest('A senha deve ter ao menos 6 caracteres.')
       data.senha = await bcrypt.hash(senha, 10)
     }
+    if (cargo !== undefined) data.cargo = String(cargo).trim()
+    if (fotoUrl !== undefined) data.fotoUrl = String(fotoUrl).trim()
 
     const novoRole = role || alvo.role
     if (role !== undefined) {

@@ -11,52 +11,49 @@
   margin-bottom: 0.2rem;
 }
 
-.table {
-  overflow: hidden;
-}
-.row {
+/* --- Cards de colaborador --- */
+.grid {
   display: grid;
-  grid-template-columns: 1.3fr 1.6fr 0.9fr 1.4fr 70px;
-  align-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
-  padding: 0.9rem 1.2rem;
-  border-bottom: 1px solid var(--color-border);
-  font-size: 0.88rem;
 }
-.row:last-child {
-  border-bottom: none;
+.card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.1rem;
+  cursor: pointer;
+  transition: transform var(--transition), border-color var(--transition);
 }
-.header {
-  font-size: 0.74rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--color-text-dim);
-  background: var(--glass-bg);
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(225, 6, 0, 0.35);
 }
-.nome {
-  font-weight: 600;
+.info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.info strong {
+  font-size: 0.95rem;
 }
 .voce {
   color: var(--color-text-dim);
   font-weight: 400;
   font-style: normal;
 }
-.email {
-  color: var(--color-text-muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.cargo {
+  font-size: 0.8rem;
+  color: var(--color-primary-glow);
 }
-.mods {
-  color: var(--color-text-muted);
-  font-size: 0.82rem;
-}
-
 .badge {
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
+  align-self: flex-start;
+  margin-top: 0.2rem;
+  padding: 0.15rem 0.55rem;
   border-radius: 999px;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
@@ -67,11 +64,10 @@
   border-color: rgba(225, 6, 0, 0.4);
   background: var(--color-primary-soft);
 }
-
 .actions {
   display: flex;
+  flex-direction: column;
   gap: 0.2rem;
-  justify-content: flex-end;
 }
 .iconBtn {
   background: transparent;
@@ -87,6 +83,71 @@
   color: #fff;
 }
 
+/* --- Detalhe (empresas atribuídas) --- */
+.detalheHead {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 1.1rem;
+  margin-bottom: 1.1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.detalheNome {
+  font-size: 1.05rem;
+  font-family: var(--font-display);
+}
+.detalheCargo {
+  font-size: 0.85rem;
+  color: var(--color-primary-glow);
+}
+.detalheTitulo {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-dim);
+  margin-bottom: 0.7rem;
+}
+.empresas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.empresaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+}
+.funcaoTag {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-primary-soft);
+  border: 1px solid rgba(225, 6, 0, 0.35);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* --- Formulário --- */
+.fotoRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--color-border);
+}
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
 .modList {
   display: flex;
   flex-direction: column;
@@ -116,7 +177,6 @@
 .modIcon {
   color: var(--color-primary-glow);
 }
-
 .formActions {
   display: flex;
   justify-content: flex-end;
@@ -124,12 +184,8 @@
   margin-top: 0.6rem;
 }
 
-@media (max-width: 720px) {
-  .row {
-    grid-template-columns: 1fr 1fr 60px;
-  }
-  .email,
-  .mods {
-    display: none;
+@media (max-width: 520px) {
+  .formRow {
+    grid-template-columns: 1fr;
   }
 }
