@@ -1,8 +1,10 @@
 // Página de Projetos: lista, cria, edita e exclui projetos da agência.
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { projectsApi } from '../lib/api'
-import { PROJECT_STATUS, formatDate } from '../lib/constants'
+import { projectsApi, usersApi, membersApi } from '../lib/api'
+import { PROJECT_STATUS, formatDate, isAdmin } from '../lib/constants'
+import { useAuth } from '../context/AuthContext'
+import Avatar from '../components/Avatar'
 import Modal from '../components/Modal'
 import styles from './Projects.module.css'
 
@@ -134,11 +136,26 @@ export default function Projects() {
 
 // --- Formulário de projeto (criar/editar) ------------------------------
 function ProjectForm({ projeto, onClose, onSaved }) {
+  const { user } = useAuth()
+  const admin = isAdmin(user)
   const [form, setForm] = useState(projeto ? { ...vazio, ...projeto } : vazio)
+  const [colaboradores, setColaboradores] = useState([])
+  const [selecionados, setSelecionados] = useState([]) // userIds ao criar
   const [erro, setErro] = useState('')
   const [salvando, setSalvando] = useState(false)
 
   const set = (campo) => (e) => setForm((f) => ({ ...f, [campo]: e.target.value }))
+
+  // Seleção de colaboradores só ao criar (admin atribui os membros da empresa).
+  useEffect(() => {
+    if (!projeto && admin) {
+      usersApi.assignable().then(setColaboradores).catch(() => setColaboradores([]))
+    }
+  }, [projeto, admin])
+
+  function toggle(userId) {
+    setSelecionados((s) => (s.includes(userId) ? s.filter((x) => x !== userId) : [...s, userId]))
+  }
 
   async function salvar(e) {
     e.preventDefault()
@@ -153,8 +170,15 @@ function ProjectForm({ projeto, onClose, onSaved }) {
         dataInicio: form.dataInicio,
         dataFim: form.dataFim,
       }
-      if (projeto) await projectsApi.update(projeto.id, payload)
-      else await projectsApi.create(payload)
+      if (projeto) {
+        await projectsApi.update(projeto.id, payload)
+      } else {
+        const novo = await projectsApi.create(payload)
+        // Atribui os colaboradores selecionados como membros da empresa.
+        await Promise.all(
+          selecionados.map((userId) => membersApi.add(novo.id, { userId }).catch(() => null)),
+        )
+      }
       onSaved()
     } catch (err) {
       setErro(err.message)
@@ -203,6 +227,42 @@ function ProjectForm({ projeto, onClose, onSaved }) {
             <input type="date" value={form.dataFim} onChange={set('dataFim')} />
           </div>
         </div>
+
+        {!projeto && admin && (
+          <div className="field">
+            <label>Colaboradores desta empresa</label>
+            {colaboradores.length === 0 ? (
+              <span className="muted" style={{ fontSize: '0.78rem' }}>
+                Nenhum colaborador cadastrado. Você pode adicionar depois na aba Equipe.
+              </span>
+            ) : (
+              <div className={styles.colabPick}>
+                {colaboradores.map((c) => (
+                  <label
+                    key={c.id}
+                    className={`${styles.colabItem} ${selecionados.includes(c.id) ? styles.colabOn : ''}`}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selecionados.includes(c.id)}
+                      onChange={() => toggle(c.id)}
+                      hidden
+                    />
+                    <Avatar nome={c.nome} fotoUrl={c.fotoUrl} size={30} />
+                    <span className={styles.colabNome}>
+                      {c.nome}
+                      {c.cargo ? <em className={styles.colabCargo}> · {c.cargo}</em> : ''}
+                    </span>
+                    {selecionados.includes(c.id) && <span className={styles.colabCheck}>✓</span>}
+                  </label>
+                ))}
+              </div>
+            )}
+            <span className="muted" style={{ fontSize: '0.75rem' }}>
+              A função de cada um você define na aba Equipe da empresa.
+            </span>
+          </div>
+        )}
 
         <div className={styles.formActions}>
           <button type="button" className="btn btn-ghost" onClick={onClose}>
