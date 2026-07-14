@@ -10,7 +10,8 @@ export const siteConfig = {
   email: 'contato@cometahub.com.br',
 
   // Número no formato internacional, somente dígitos (DDI + DDD + número).
-  whatsapp: '5599999999999',
+  whatsapp: '5531993367424',
+  whatsappDisplay: '(31) 99336-7424',
   whatsappMessage: 'Olá! Vim pelo site e quero saber mais sobre as soluções da CometaHub.',
 
   social: {

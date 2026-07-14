@@ -65,7 +65,7 @@ export default function Contact() {
               <span className={styles.infoIcon}><FiPhone /></span>
               <div>
                 <strong>WhatsApp</strong>
-                <span>Atendimento rápido, fale agora</span>
+                <span>{siteConfig.whatsappDisplay}</span>
               </div>
             </a>
 

@@ -3,7 +3,7 @@
 // Rodapé com logo + descrição, links de navegação e redes sociais.
 // =========================================================================
 import { FaInstagram, FaLinkedinIn, FaFacebookF, FaYoutube } from 'react-icons/fa'
-import { siteConfig, navLinks } from '../../data/siteConfig'
+import { siteConfig, navLinks, getWhatsAppLink } from '../../data/siteConfig'
 import styles from './Footer.module.css'
 
 const socialIcons = {
@@ -47,6 +47,11 @@ export default function Footer() {
           <ul>
             <li>
               <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+            </li>
+            <li>
+              <a href={getWhatsAppLink()} target="_blank" rel="noopener noreferrer">
+                WhatsApp: {siteConfig.whatsappDisplay}
+              </a>
             </li>
           </ul>
           <div className={styles.social}>
